@@ -1,21 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 import { Song } from "@/types/song";
+import usePlayer from "@/hook/usePlayer";
 
-const MediaItem: React.FC<Song> = ({ icon, song, title, video }) => {
+const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
   const [liked, setLiked] = useState(false);
 
-  const handleLikeButton = () => {
+  const player = usePlayer();
+
+  const handleLikeButton: MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation();
     setLiked(!liked);
-    console.log(icon, title);
+  };
+
+  const onClick = () => {
+    player.setCurrentSong({
+      id,
+      icon,
+      song,
+      title,
+      video,
+      image,
+    });
   };
 
   return (
     <div
+      onClick={onClick}
       className="
         py-2
         px-4
@@ -24,24 +39,41 @@ const MediaItem: React.FC<Song> = ({ icon, song, title, video }) => {
         justify-center
         items-center
         rounded-3xl
-       bg-neutral-900/60
+       bg-neutral-800/60
        hover:bg-neutral-900
+       cursor-pointer
+       group
+       relative
       "
     >
+      <div
+        className="
+        absolute
+        cursor-pointer
+        w-12
+        h-12
+        rounded-full
+        group-hover:bg-emerald-500/80
+        transition
+        inset-0
+        top-12
+        left-2
+      "
+      ></div>
       <Image
         className="rounded-2xl w-[120px] h-[120px] object-cover select-none"
         width={120}
         height={120}
         alt="Media Image"
-        src={`/${icon}`}
+        src={`${icon}`}
       />
       <div className="flex flex-col justify-between text-white gap-y-1 select-none">
-        <h2 className=" opacity-1 text-xl font-medium">{title}</h2>
+        <h2 className="opacity-1 text-xl font-medium w-14">{title}</h2>
         <p className="text-neutral-300 text-base">Carti</p>
       </div>
       <div
         onClick={handleLikeButton}
-        className="text-red-600 cursor-pointer hover:text-red-500 active:scale-110"
+        className="text-red-600 hover:text-red-500 active:scale-110 mt-8"
       >
         {liked ? <AiFillHeart size={30} /> : <AiOutlineHeart size={30} />}
       </div>

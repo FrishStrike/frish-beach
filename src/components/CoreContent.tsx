@@ -1,6 +1,11 @@
+"use client";
+
+import usePlayer from "@/hook/usePlayer";
 import Image from "next/image";
 
 const CoreContent = () => {
+  const player = usePlayer();
+
   return (
     <div
       className="
@@ -14,7 +19,7 @@ const CoreContent = () => {
       <Image
         fill
         alt="sorry"
-        src="/Yeat.webp"
+        src={player.currentSong.image}
         className="object-cover select-none"
       />
     </div>

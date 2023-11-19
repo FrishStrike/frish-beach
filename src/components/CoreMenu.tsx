@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
@@ -9,14 +9,17 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useSound from "use-sound";
 import MediaItem from "./MediaItem";
 import usePlayer from "@/hook/usePlayer";
+import { Song } from "@/types/song";
 
 const CoreMenu = () => {
   const [isPlay, setIsPlay] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [indexSong, setIndexSong] = useState(0);
+  const [music, setMusic] = useState<Song>();
 
   const player = usePlayer();
 
-  const [play, { pause, sound }] = useSound("/audio.mp3", {
+  const [play, { pause, sound }] = useSound(player.currentSong.song, {
     volume: volume,
     format: ["mp3"],
     onplay: () => setIsPlay(true),
@@ -26,11 +29,37 @@ const CoreMenu = () => {
 
   useEffect(() => {
     sound?.play();
-
     return () => {
       sound?.unload();
     };
   }, [sound]);
+
+  const stepBackward = () => {
+    if (indexSong) {
+      player.setCurrentSong(player.data[indexSong - 1]);
+    } else {
+      player.setCurrentSong(player.data[player.data.length - 1]);
+    }
+  };
+  const stepForward = () => {
+    if (indexSong !== player.data.length - 1) {
+      player.setCurrentSong(player.data[indexSong + 1]);
+    } else {
+      player.setCurrentSong(player.data[0]);
+    }
+  };
+
+  useEffect(() => {
+    setMusic(player.currentSong);
+    console.log(music);
+  }, [player.currentSong]);
+
+  useMemo(() => {
+    const indexSong = player.data.findIndex(
+      (song) => player.currentSong.id === song.id
+    );
+    setIndexSong(indexSong);
+  }, [player.currentSong]);
 
   const handlePlayButton = () => {
     if (!isPlay) {
@@ -76,11 +105,20 @@ const CoreMenu = () => {
         rounded-t-3xl
       "
       >
-        {/* <MediaItem /> */}
+        {music && (
+          <MediaItem
+            id={music.id}
+            icon={music.icon}
+            image={music.image}
+            song={music.song}
+            title={music.title}
+          />
+        )}
         <div className="flex text-white transition">
           <AiFillStepBackward
             size={45}
             className="cursor-pointer hover:brightness-50 active:scale-110"
+            onClick={stepBackward}
           />
           <div
             onClick={handlePlayButton}
@@ -91,6 +129,7 @@ const CoreMenu = () => {
           <AiFillStepForward
             size={45}
             className="cursor-pointer hover:brightness-50 active:scale-110"
+            onClick={stepForward}
           />
         </div>
         <div className="text-white transition" onClick={handleVolumeButton}>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Input from "./Input";
 import Modal from "./Modal";
 
@@ -10,15 +9,15 @@ import readDataFromFile from "@/utils/readDataFromFile";
 
 import useModal from "@/hook/useModal";
 
+import { nanoid } from "nanoid";
+
 const UploadModal = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const modal = useModal();
 
   const player = usePlayer();
 
   const createSong: SubmitHandler<FieldValues> = async (values) => {
     try {
-      setIsLoading(true);
       const title = values.title;
       const songFile = values.song[0];
       const imageFile = values.image[0];
@@ -28,27 +27,58 @@ const UploadModal = () => {
       const song = await readDataFromFile(songFile);
       const image = await readDataFromFile(imageFile);
       const icon = await readDataFromFile(iconFile);
+
+      let video = null;
+
       if (videoFile) {
-        const video = await readDataFromFile(videoFile);
+        video = await readDataFromFile(videoFile);
       }
 
-      player.setSong({
-        title: title,
-        icon: icon,
-        image: image,
-        song: song,
-      });
-      player.setData({
-        title: title,
-        icon: icon,
-        image: image,
-        song: song,
-      });
+      if (player.data) {
+        if (video) {
+          player.setData({
+            ...player.data,
+            title: title,
+            icon: icon,
+            image: image,
+            song: song,
+            video: video,
+            id: nanoid(),
+          });
+        } else {
+          player.setData({
+            ...player.data,
+            title: title,
+            icon: icon,
+            image: image,
+            song: song,
+            id: nanoid(),
+          });
+        }
+      } else {
+        if (video) {
+          player.setData({
+            title: title,
+            icon: icon,
+            image: image,
+            song: song,
+            video: video,
+            id: nanoid(),
+          });
+        } else {
+          player.setData({
+            title: title,
+            icon: icon,
+            image: image,
+            song: song,
+            id: nanoid(),
+          });
+        }
+      }
     } catch (error) {
       console.log(error);
     } finally {
       modal.onClose();
-      setIsLoading(false);
     }
   };
 

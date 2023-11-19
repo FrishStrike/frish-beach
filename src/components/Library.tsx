@@ -7,11 +7,18 @@ import useModal from "@/hook/useModal";
 import usePlayer from "@/hook/usePlayer";
 import MediaItem from "./MediaItem";
 
+import { useEffect, useState } from "react";
+import { Song } from "@/types/song";
+
 const Library = () => {
   const modal = useModal();
-  const player = usePlayer();
+  const data = usePlayer((state) => state.data);
 
-  console.log(player.song);
+  const [media, setMedia] = useState<Song[]>();
+
+  useEffect(() => {
+    setMedia(data);
+  }, [data]);
 
   return (
     <div>
@@ -33,16 +40,19 @@ const Library = () => {
           />
         </div>
       </div>
-      <div>
-        {player.song && (
-          <MediaItem
-            key={player.song.title}
-            title={player.song.title}
-            image={player.song.image}
-            icon={player.song.icon}
-            song={player.song.song}
-          />
-        )}
+      <div className="flex flex-col gap-y-2 w-full">
+        {media?.[0] &&
+          media.map((song) => (
+            <MediaItem
+              id={song.id}
+              title={song.title}
+              image={song.image}
+              icon={song.icon}
+              song={song.song}
+              video={song?.video}
+              key={song.id}
+            />
+          ))}
       </div>
     </div>
   );
