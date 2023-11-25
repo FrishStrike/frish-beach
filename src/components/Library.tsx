@@ -21,7 +21,7 @@ const Library = () => {
   }, [data]);
 
   return (
-    <div>
+    <div className="h-full overflow-y-hidden">
       <div
         className="
         flex
@@ -40,7 +40,7 @@ const Library = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-y-2 w-full">
+      <div className="flex flex-col gap-y-2 w-full h-[92%] lg:h-[567px] overflow-y-auto">
         {media?.[0] &&
           media.map((song) => (
             <MediaItem

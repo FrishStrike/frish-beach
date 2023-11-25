@@ -10,7 +10,15 @@ export default function Home() {
       "
     >
       <CoreContent />
-      <CoreMenu />
+      <div
+        className="
+          h-full
+          flex
+          justify-center
+          items-end"
+      >
+        <CoreMenu />
+      </div>
     </main>
   );
 }

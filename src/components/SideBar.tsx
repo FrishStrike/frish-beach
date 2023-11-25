@@ -34,15 +34,15 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
   );
 
   return (
-    <div className="flex w-full h-screen overflow-hidden p-2">
+    <div className="flex w-full h-screen overflow-hidden">
       <div
         className="
         hidden
         lg:flex
         flex-col
-        h-full
+        h-[calc(100%-8px)]
         w-[400px]
-        p-2
+        m-2
         bg-neutral-900/30
         backdrop-blur-md
         border-zinc-900
@@ -59,7 +59,9 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
             key={route.title}
           />
         ))}
-        <Library />
+        <div className="h-full">
+          <Library />
+        </div>
       </div>
       <div className="w-full h-screen">{children}</div>
     </div>

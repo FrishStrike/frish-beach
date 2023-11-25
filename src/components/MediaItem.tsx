@@ -1,11 +1,15 @@
 "use client";
 
 import Image from "next/image";
+
 import { MouseEventHandler, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { BsPlayFill } from "react-icons/bs";
 
 import { Song } from "@/types/song";
 import usePlayer from "@/hook/usePlayer";
+
+import { toast } from "react-toastify";
 
 const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
   const [liked, setLiked] = useState(false);
@@ -15,6 +19,19 @@ const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
   const handleLikeButton: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
     setLiked(!liked);
+    if (!liked) {
+      toast("👽 Let's Go!", {
+        position: "top-right",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        className: "absolute",
+      });
+    }
   };
 
   const onClick = () => {
@@ -58,8 +75,13 @@ const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
         inset-0
         top-12
         left-2
+        flex
+        justify-center
+        items-center
       "
-      ></div>
+      >
+        <BsPlayFill className="opacity-0 group-hover:opacity-100" size={30} />
+      </div>
       <Image
         className="rounded-2xl w-[120px] h-[120px] object-cover select-none"
         width={120}

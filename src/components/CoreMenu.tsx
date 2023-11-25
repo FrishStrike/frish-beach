@@ -51,7 +51,6 @@ const CoreMenu = () => {
 
   useEffect(() => {
     setMusic(player.currentSong);
-    console.log(music);
   }, [player.currentSong]);
 
   useMemo(() => {
@@ -61,7 +60,9 @@ const CoreMenu = () => {
     setIndexSong(indexSong);
   }, [player.currentSong]);
 
-  const handlePlayButton = () => {
+  const handlePlayButton = (e: any) => {
+    console.log(e);
+
     if (!isPlay) {
       play();
     } else {
@@ -77,43 +78,54 @@ const CoreMenu = () => {
     }
   };
 
+  useEffect(() => {
+    const onDown = (e: KeyboardEvent) => {
+      if (e.key === " " && !isPlay) {
+        play();
+      } else if (e.key === " ") {
+        pause();
+      }
+    };
+    document.addEventListener("keydown", onDown);
+
+    return () => {
+      document.removeEventListener("keydown", onDown);
+    };
+  });
+
   return (
     <div
       className="
-      h-full
-      flex
-      justify-center
-      items-end
-    "
-    >
-      <div
-        className="
         flex
         flex-col
         sm:flex-row
         items-center
-        justify-between
+        justify-around
+        gap-4
+        md:justify-between
         px-5
         py-4
         w-full
         sm:w-[75%]
-        h-[30%]
+        min-h-[30%]
+        overflow-auto
         bg-neutral-900/30
         backdrop-blur-md
         border-zinc-900
         border-[3px]
         rounded-t-3xl
       "
-      >
-        {music && (
-          <MediaItem
-            id={music.id}
-            icon={music.icon}
-            image={music.image}
-            song={music.song}
-            title={music.title}
-          />
-        )}
+    >
+      {music && (
+        <MediaItem
+          id={music.id}
+          icon={music.icon}
+          image={music.image}
+          song={music.song}
+          title={music.title}
+        />
+      )}
+      <div className="flex gap-7">
         <div className="flex text-white transition">
           <AiFillStepBackward
             size={45}
@@ -121,7 +133,9 @@ const CoreMenu = () => {
             onClick={stepBackward}
           />
           <div
+            id="play_button"
             onClick={handlePlayButton}
+            tabIndex={0}
             className="cursor-pointer hover:brightness-50 active:scale-110"
           >
             {isPlay ? <BsPauseFill size={45} /> : <BsPlayFill size={45} />}

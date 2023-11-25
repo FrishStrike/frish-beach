@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+
 import { Poppins } from "next/font/google";
+
 import "./globals.css";
+
 import SideBar from "@/components/SideBar";
-import NavBar from "@/components/NavBar";
 import ModalProvider from "@/providers/ModalProvider";
+import CustomMenu from "@/components/CustomMenu";
+import NavBar from "@/components/NavBar";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -25,6 +29,7 @@ export default function RootLayout({
       <body className={font.className}>
         <ModalProvider />
         <SideBar>
+          <CustomMenu />
           <NavBar />
           {children}
         </SideBar>

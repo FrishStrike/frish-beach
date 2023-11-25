@@ -3,8 +3,12 @@
 import Input from "./Input";
 import Modal from "./Modal";
 
+import { IoMdClose } from "react-icons/io";
+
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+
 import usePlayer from "@/hook/usePlayer";
+
 import readDataFromFile from "@/utils/readDataFromFile";
 
 import useModal from "@/hook/useModal";
@@ -95,8 +99,14 @@ const UploadModal = () => {
         gap-4
         justify-center
         items-center
+        relative
       "
       >
+        <IoMdClose
+          size={40}
+          className="absolute inset-0 top-[-18%] left-[93%] cursor-pointer"
+          onClick={() => modal.onClose()}
+        />
         <div>
           <p className="text-sm">Select a title</p>
           <Input
