@@ -2,23 +2,37 @@
 
 import Image from "next/image";
 
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsPlayFill } from "react-icons/bs";
 
 import { Song } from "@/types/song";
+
 import usePlayer from "@/hook/usePlayer";
 
 import { toast } from "react-toastify";
 
-const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
+const MediaItem: React.FC<Song> = ({
+  id,
+  icon,
+  song,
+  title,
+  video,
+  image,
+  isLiked,
+}) => {
+  const { setLike, currentSong, setCurrentSong } = usePlayer();
   const [liked, setLiked] = useState(false);
 
-  const player = usePlayer();
+  useEffect(() => {
+    setLiked(isLiked);
+  }, [isLiked]);
 
   const handleLikeButton: MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
+    setLike(!liked, id);
     setLiked(!liked);
+
     if (!liked) {
       toast("👽 Let's Go!", {
         position: "top-right",
@@ -35,13 +49,14 @@ const MediaItem: React.FC<Song> = ({ id, icon, song, title, video, image }) => {
   };
 
   const onClick = () => {
-    player.setCurrentSong({
+    setCurrentSong({
       id,
       icon,
       song,
       title,
       video,
       image,
+      isLiked,
     });
   };
 

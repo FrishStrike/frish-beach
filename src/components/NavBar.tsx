@@ -55,6 +55,7 @@ const NavBar = () => {
       text-2xl
       select-none
       [text-shadow:_0_0_3px_black]
+      z-10
     "
     >
       <div className="absolute">

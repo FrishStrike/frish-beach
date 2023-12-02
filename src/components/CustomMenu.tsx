@@ -9,13 +9,13 @@ const CustomMenu = () => {
   return (
     <div
       className={`
-        absolute
+        fixed
         rounded-2xl
         inset-0
         left-0
         z-10
         w-full
-        h-full
+        h-screen
         duration-500
         ${!menu.isOpen && "-translate-x-full"}
       `}

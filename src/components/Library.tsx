@@ -7,18 +7,9 @@ import useModal from "@/hook/useModal";
 import usePlayer from "@/hook/usePlayer";
 import MediaItem from "./MediaItem";
 
-import { useEffect, useState } from "react";
-import { Song } from "@/types/song";
-
 const Library = () => {
   const modal = useModal();
-  const data = usePlayer((state) => state.data);
-
-  const [media, setMedia] = useState<Song[]>();
-
-  useEffect(() => {
-    setMedia(data);
-  }, [data]);
+  const { data } = usePlayer();
 
   return (
     <div className="h-full overflow-y-hidden">
@@ -41,8 +32,8 @@ const Library = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-2 w-full h-[92%] lg:h-[567px] overflow-y-auto">
-        {media?.[0] &&
-          media.map((song) => (
+        {data?.[0] &&
+          data.map((song) => (
             <MediaItem
               id={song.id}
               title={song.title}
@@ -50,6 +41,7 @@ const Library = () => {
               icon={song.icon}
               song={song.song}
               video={song?.video}
+              isLiked={song.isLiked}
               key={song.id}
             />
           ))}

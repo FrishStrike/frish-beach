@@ -48,6 +48,7 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
         border-zinc-900
         border-[3px]
         rounded-3xl
+        z-10
       "
       >
         {routes.map((route) => (

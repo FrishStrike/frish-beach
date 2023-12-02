@@ -42,6 +42,7 @@ const UploadModal = () => {
         if (video) {
           player.setData({
             ...player.data,
+            isLiked: false,
             title: title,
             icon: icon,
             image: image,
@@ -56,6 +57,7 @@ const UploadModal = () => {
             icon: icon,
             image: image,
             song: song,
+            isLiked: false,
             id: nanoid(),
           });
         }
@@ -67,6 +69,7 @@ const UploadModal = () => {
             image: image,
             song: song,
             video: video,
+            isLiked: false,
             id: nanoid(),
           });
         } else {
@@ -75,6 +78,7 @@ const UploadModal = () => {
             icon: icon,
             image: image,
             song: song,
+            isLiked: false,
             id: nanoid(),
           });
         }

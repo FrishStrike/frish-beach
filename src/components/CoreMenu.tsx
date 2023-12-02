@@ -9,13 +9,11 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useSound from "@/libs/use-sound";
 import MediaItem from "./MediaItem";
 import usePlayer from "@/hook/usePlayer";
-import { Song } from "@/types/song";
 
 const CoreMenu = () => {
   const [isPlay, setIsPlay] = useState(false);
   const [volume, setVolume] = useState(1);
   const [indexSong, setIndexSong] = useState(0);
-  const [music, setMusic] = useState<Song>();
 
   const player = usePlayer();
 
@@ -49,24 +47,14 @@ const CoreMenu = () => {
     }
   };
 
-  useEffect(() => {
-    setMusic(player.currentSong);
-  }, [player.currentSong]);
-
-  useMemo(() => {
-    const indexSong = player.data.findIndex(
-      (song) => player.currentSong.id === song.id
-    );
-    setIndexSong(indexSong);
-  }, [player.currentSong]);
-
-  const handlePlayButton = (e: any) => {
-    console.log(e);
-
+  const handlePlayButton = () => {
+    const video = document.querySelector("video");
     if (!isPlay) {
       play();
+      video?.play();
     } else {
       pause();
+      video?.pause();
     }
   };
 
@@ -79,19 +67,49 @@ const CoreMenu = () => {
   };
 
   useEffect(() => {
+    const video = document.querySelector("video");
+    let content = document.querySelector('img[alt="content"]');
+
+    if (!content) {
+      content = document.querySelector("video[autoplay]");
+    }
+    !content && console.log("Error, content is not find");
+
+    const onClick = () => {
+      if (!isPlay) {
+        play();
+        video?.play();
+      } else {
+        pause();
+        video?.pause();
+      }
+    };
+
+    content?.addEventListener("click", onClick);
+
     const onDown = (e: KeyboardEvent) => {
       if (e.key === " " && !isPlay) {
         play();
+        video?.play();
       } else if (e.key === " ") {
         pause();
+        video?.pause();
       }
     };
     document.addEventListener("keydown", onDown);
 
     return () => {
       document.removeEventListener("keydown", onDown);
+      content?.removeEventListener("click", onClick);
     };
   });
+
+  useMemo(() => {
+    const indexSong = player.data.findIndex(
+      (song) => player.currentSong.id === song.id
+    );
+    setIndexSong(indexSong);
+  }, [player.currentSong]);
 
   return (
     <div
@@ -116,13 +134,15 @@ const CoreMenu = () => {
         rounded-t-3xl
       "
     >
-      {music && (
+      {player.currentSong && (
         <MediaItem
-          id={music.id}
-          icon={music.icon}
-          image={music.image}
-          song={music.song}
-          title={music.title}
+          id={player.currentSong.id}
+          isLiked={player.currentSong.isLiked}
+          icon={player.currentSong.icon}
+          image={player.currentSong.image}
+          song={player.currentSong.song}
+          title={player.currentSong.title}
+          video={player.currentSong.video}
         />
       )}
       <div className="flex gap-7">

@@ -7,5 +7,6 @@ export interface Song {
   image: string;
   icon: string;
   video?: string;
+  isLiked: boolean;
   numberOfLikes?: object[];
 }

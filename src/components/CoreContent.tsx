@@ -4,24 +4,40 @@ import usePlayer from "@/hook/usePlayer";
 import Image from "next/image";
 
 const CoreContent = () => {
-  const player = usePlayer();
+  const { currentSong } = usePlayer();
 
   return (
     <div
       className="
       absolute
+      overflow-hidden
       inset-0
-      -z-10
+      z-0
       w-full
       h-full
     "
     >
-      <Image
-        fill
-        alt="sorry"
-        src={player.currentSong.image}
-        className="object-cover select-none"
-      />
+      {currentSong.video ? (
+        <video
+          className="
+            object-cover
+            w-full
+            h-full
+          "
+          src={currentSong.video}
+          poster={currentSong.image}
+          autoPlay
+          muted
+          loop
+        ></video>
+      ) : (
+        <Image
+          fill
+          alt="content"
+          src={currentSong.image}
+          className="object-cover select-none"
+        />
+      )}
     </div>
   );
 };
