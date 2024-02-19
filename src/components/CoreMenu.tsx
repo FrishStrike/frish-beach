@@ -51,7 +51,11 @@ const CoreMenu = () => {
     const video = document.querySelector("video");
     if (!isPlay) {
       play();
-      video?.play();
+      try {
+        video?.play();
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       pause();
       video?.pause();

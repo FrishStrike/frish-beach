@@ -23,7 +23,7 @@ const Modal: React.FC<UploadModalProps> = ({ children }) => {
         `
         hidden
         absolute
-        z-20
+        z-30
         inset-0
         w-full
         h-full

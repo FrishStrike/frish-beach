@@ -13,7 +13,7 @@ const CustomMenu = () => {
         rounded-2xl
         inset-0
         left-0
-        z-10
+        z-20
         w-full
         h-screen
         duration-500
